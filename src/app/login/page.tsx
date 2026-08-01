@@ -107,6 +107,12 @@ function LoginForm() {
                 <label htmlFor="password" className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500">
                   Password
                 </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors"
+                >
+                  Forgot password?
+                </Link>
               </div>
               <div className="relative group">
                 <input

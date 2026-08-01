@@ -12,7 +12,11 @@ export async function proxy(request: NextRequest) {
   // Define route classifications
   const isAdminRoute = pathname.startsWith('/admin');
   const isDashboardRoute = pathname.startsWith('/dashboard');
-  const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/signup');
+  const isAuthRoute =
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/signup') ||
+    pathname.startsWith('/forgot-password') ||
+    pathname.startsWith('/reset-password');
   const isAdminApiRoute = pathname.startsWith('/api/admin');
   const isCandidateApiRoute = pathname.startsWith('/api/candidate');
 
@@ -51,7 +55,7 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Redirect logged-in users away from /login and /signup
+  // Redirect logged-in users away from /login, /signup, /forgot-password, /reset-password
   if (isAuthRoute && session) {
     if (session.role === 'ADMIN') {
       return NextResponse.redirect(new URL('/admin', request.url));
@@ -70,6 +74,8 @@ export const config = {
     '/dashboard/:path*',
     '/login',
     '/signup',
+    '/forgot-password',
+    '/reset-password',
     '/api/admin/:path*',
     '/api/candidate/:path*',
   ],
