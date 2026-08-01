@@ -116,5 +116,8 @@ export const GET = wrapRouteHandler(async (
       updatedAt: application.updatedAt,
     },
     offer: offerDetails,
+    viewerRole: session.role,
+    isCandidateOwner: isOwner && session.role === 'CANDIDATE',
   });
 });
+

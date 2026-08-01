@@ -34,9 +34,9 @@ export const POST = wrapRouteHandler(async (
     return errorResponse('Application not found.', 404);
   }
 
-  // 3. Authorization check
-  if (application.candidateId !== session.id) {
-    return errorResponse('Access denied. You cannot accept this offer.', 403);
+  // 3. Authorization check — only the candidate owner can accept the offer
+  if (session.role !== 'CANDIDATE' || application.candidateId !== session.id) {
+    return errorResponse('Access denied. Only the candidate who received this offer can accept it.', 403);
   }
 
   if (application.status === 'ACCEPTED') {

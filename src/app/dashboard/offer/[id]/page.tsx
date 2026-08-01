@@ -62,6 +62,8 @@ export default function OfferLetterPage({ params }: { params: Promise<{ id: stri
   const [error, setError] = useState<string | null>(null);
   const [offer, setOffer] = useState<OfferPayload | null>(null);
   const [status, setStatus] = useState<string>('');
+  const [viewerRole, setViewerRole] = useState<'ADMIN' | 'CANDIDATE' | ''>('');
+  const [isCandidateOwner, setIsCandidateOwner] = useState(false);
   const [accepting, setAccepting] = useState(false);
   const [acceptSuccess, setAcceptSuccess] = useState(false);
 
@@ -78,6 +80,8 @@ export default function OfferLetterPage({ params }: { params: Promise<{ id: stri
 
         setOffer(data.data.offer);
         setStatus(data.data.application.status);
+        setViewerRole(data.data.viewerRole || 'CANDIDATE');
+        setIsCandidateOwner(Boolean(data.data.isCandidateOwner));
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -93,6 +97,11 @@ export default function OfferLetterPage({ params }: { params: Promise<{ id: stri
   };
 
   const handleAcceptOffer = async () => {
+    if (viewerRole === 'ADMIN' || !isCandidateOwner) {
+      alert('Only the candidate who received this offer can accept it.');
+      return;
+    }
+
     setAccepting(true);
     try {
       const res = await fetch(`/api/candidate/offer/${applicationId}/accept`, {
@@ -113,6 +122,10 @@ export default function OfferLetterPage({ params }: { params: Promise<{ id: stri
     }
   };
 
+  const isAdmin = viewerRole === 'ADMIN';
+  const backHref = isAdmin ? '/admin/applications' : '/dashboard';
+  const backLabel = isAdmin ? 'Back to Applications' : 'Back to Dashboard';
+
   if (loading) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center pt-20">
@@ -130,11 +143,11 @@ export default function OfferLetterPage({ params }: { params: Promise<{ id: stri
           <h2 className="text-2xl font-bold text-white mb-2">Unable to load offer letter</h2>
           <p className="text-sm text-zinc-400 mb-6">{error || 'Offer letter is not accessible.'}</p>
           <Link
-            href="/dashboard"
+            href={backHref}
             className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-bold text-zinc-950 hover:bg-emerald-400 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
+            {backLabel}
           </Link>
         </div>
       </div>
@@ -142,6 +155,7 @@ export default function OfferLetterPage({ params }: { params: Promise<{ id: stri
   }
 
   const isAccepted = status === 'ACCEPTED';
+  const canCandidateAccept = !isAdmin && isCandidateOwner && !isAccepted;
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 pt-24 pb-20 px-4 sm:px-6 lg:px-8">
@@ -150,9 +164,9 @@ export default function OfferLetterPage({ params }: { params: Promise<{ id: stri
         <div className="glass-card rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 border border-white/10 shadow-2xl">
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <Link
-              href="/dashboard"
+              href={backHref}
               className="flex items-center justify-center h-10 w-10 rounded-xl bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 border border-white/10 transition-colors"
-              title="Back to Dashboard"
+              title={backLabel}
             >
               <ArrowLeft className="h-5 w-5" />
             </Link>
@@ -161,13 +175,19 @@ export default function OfferLetterPage({ params }: { params: Promise<{ id: stri
                 <span className="text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
                   {offer.offerReference}
                 </span>
-                {isAccepted ? (
+
+                {isAdmin ? (
+                  <span className="text-xs font-bold text-cyan-300 bg-cyan-500/15 px-2.5 py-0.5 rounded-full border border-cyan-500/30 flex items-center gap-1">
+                    <ShieldCheck className="h-3.5 w-3.5 text-cyan-400" />
+                    Admin View (Read-Only) {isAccepted ? '• Accepted' : '• Pending'}
+                  </span>
+                ) : isAccepted ? (
                   <span className="text-xs font-bold text-emerald-300 bg-emerald-500/20 px-2.5 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Offer Accepted
                   </span>
                 ) : (
                   <span className="text-xs font-bold text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">
-                    Awaiting Candidate Decision
+                    Awaiting Your Decision
                   </span>
                 )}
               </div>
@@ -185,7 +205,8 @@ export default function OfferLetterPage({ params }: { params: Promise<{ id: stri
               Print / Save as PDF
             </button>
 
-            {!isAccepted && (
+            {/* Accept button only rendered for candidate recipient */}
+            {canCandidateAccept && (
               <button
                 type="button"
                 onClick={handleAcceptOffer}
