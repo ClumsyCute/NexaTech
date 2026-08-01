@@ -29,7 +29,7 @@ const INITIAL_MESSAGES: Message[] = [
   {
     id: '1',
     sender: 'daisy',
-    text: "Hi there! I'm **Daisy** 🌼, your cute AI career assistant! How can I help you today? You can ask about our jobs, application statuses, interview tips, or how to view and download your offer letter! ✨",
+    text: "Hi there! I'm **Daisy** 🌼, your AI career assistant! How can I help you today? You can ask about our jobs, application statuses, interview tips, or how to view and download your offer letter! ✨",
     timestamp: 'Just now',
   },
 ];

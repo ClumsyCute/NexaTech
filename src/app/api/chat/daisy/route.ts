@@ -145,7 +145,7 @@ function getDaisyResponse(input: string): string {
     query.includes('who are you')
   ) {
     return (
-      "Hi there! I'm **Daisy** 🌼, your cute AI career assistant at NexaTech!\n\n" +
+      "Hi there! I'm **Daisy** 🌼, your AI career assistant at NexaTech!\n\n" +
       "I'm here to help you navigate open jobs, track applications, view & download your offer letters, learn about our benefits, and prepare for interviews.\n\n" +
       "What can I help you explore today? ✨"
     );
