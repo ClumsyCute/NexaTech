@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NexaTech Careers Portal
 
-## Getting Started
+A production-quality Careers Portal built from scratch for **NexaTech**, a fictional tech company. This application provides a high-fidelity interface for searching jobs, applying with resume uploads, and tracking application status, alongside an administrative workspace to manage openings and review pipeline stages.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Technical Architecture
+
+The project is structured as a unified **Next.js App Router** application, combining server-side rendering, client-side dynamic states, API routes, and a local file-based database:
+
+```mermaid
+graph TD
+    Client[Next.js Client Components / Framer Motion] <--> API[Next.js Server API Routes / Middleware]
+    API <--> ORM[Prisma Client v7]
+    ORM <--> DB[(SQLite database / dev.db)]
+    API <--> Storage[(uploads/resumes/ PDF files)]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*   **Framework**: Next.js 14+ (App Router)
+*   **Database**: SQLite via Prisma ORM
+*   **Styling**: Tailwind CSS
+*   **Animations**: Framer Motion
+*   **Authentication**: Stateless JWTs stored in `HttpOnly`, `SameSite=Lax` cookies via `jose`
+*   **Resumes File Upload**: Safe multipart uploader with file system storage and secure route download streams.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Directory Structure
 
-## Learn More
+```text
+├── prisma/
+│   ├── schema.prisma      # SQLite Database Schema
+│   └── seed.ts            # Admin, candidate, and job opening seed data
+├── public/                # Static assets (favicons, icons)
+├── src/
+│   ├── app/
+│   │   ├── admin/         # Admin Workspace pages
+│   │   ├── api/           # API Endpoints (Auth, Admin, Applications, Notifications)
+│   │   ├── dashboard/     # Candidate Dashboard & Notifications Center
+│   │   ├── jobs/          # Public Jobs Board & Job Details
+│   │   ├── login/         # Sign-in UI
+│   │   ├── signup/        # Careers Registration UI
+│   │   ├── error.tsx      # Global 500 error boundary
+│   │   └── not-found.tsx  # Custom 404 page
+│   ├── components/        # Reusable Client & Server components (Navbar, Footer, Filter board)
+│   ├── lib/               # Utility functions (Prisma singleton, API wrappers, JWT, PBKDF2 Hashing)
+│   └── middleware.ts      # Route protection & role verification (Admin vs. Candidate)
+├── uploads/resumes/       # Secure file system storage for candidate resumes
+├── package.json
+└── tsconfig.json
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Quick Start Guide
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Since NexaTech utilizes SQLite and Next.js Server APIs, running the application on a fresh Windows machine requires only Node.js and Git.
 
-## Deploy on Vercel
+### 1. Clone & Install dependencies
+```powershell
+git clone <your-repository-url>
+cd delightful-carson
+npm install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 2. Initialize Database & Seed data
+Generate the Prisma Client types, push the schema to SQLite (`dev.db`), and seed initial users and jobs:
+```powershell
+npx prisma generate
+npx prisma db push
+npx prisma db seed
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 3. Run the Development Server
+```powershell
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the portal.
+
+---
+
+## Seeding Credentials
+
+The seed script establishes two default users:
+
+### 👤 Administrator
+*   **Email**: `admin@nexatech.com`
+*   **Password**: `AdminPassword123`
+*   **Access**: Post/Edit jobs, view all pipeline applicants, update statuses, download resume PDFs.
+
+### 👤 Candidate
+*   **Email**: `candidate@example.com`
+*   **Password**: `CandidatePassword123`
+*   **Access**: Apply to jobs, upload PDF resumes, access Candidate Dashboard, read notifications.
+
+---
+
+## Core Features
+
+1.  **Public Jobs Board**: Multi-select filters for Location, Experience level, and Job Type.
+2.  **Auth & Role Access Control**: Middleware protection intercepting unauthorized routes.
+3.  **PDF Resume Upload**: Validates uploader size/format and streams files securely.
+4.  **Notifications Hub**: In-app center triggering updates on application status changes.
+5.  **Admin Review Workspace**: Full search capabilities, timeline decision updates, and custom messaging triggers.
