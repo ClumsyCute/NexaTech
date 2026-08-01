@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  name          String
+  role          String         // "ADMIN" | "CANDIDATE"
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  applications  Application[]
+  notifications Notification[]
+}
+
+model Job {
+  id             String         @id @default(uuid())
+  title          String
+  description    String
+  location       String
+  experience     String         // "Entry Level" | "Mid Level" | "Senior" | "Lead"
+  skills         String         // Comma-separated list of skills
+  salary         String?        // e.g. "$120,000 - $150,000"
+  employmentType String         // "Full-time" | "Part-time" | "Contract" | "Internship"
+  deadline       DateTime
+  status         String         @default("OPEN") // "OPEN" | "CLOSED"
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  applications   Application[]
+}
+
+model Application {
+  id                String   @id @default(uuid())
+  candidateId       String
+  jobId             String
+  status            String   @default("SUBMITTED") // "SUBMITTED" | "SHORTLISTED" | "REJECTED" | "ACCEPTED" | "OFFER_RELEASED"
+  name              String
+  email             String
+  phone             String
+  address           String?
+  resumePath        String
+  linkedIn          String?
+  gitHub            String?
+  portfolio         String?
+  yearsOfExperience Float
+  skills            String   // Comma-separated skills
+  currentCompany    String?
+  currentCtc        String?
+  expectedCtc       String?
+  noticePeriod      String?
+  coverLetter       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  candidate User @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job       Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  type      String   // "NEW_JOB" | "STATUS_CHANGE" | "CUSTOM"
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

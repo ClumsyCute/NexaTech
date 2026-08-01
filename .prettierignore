@@ -1,0 +1,8 @@
+.next
+node_modules
+package-lock.json
+src/generated/prisma
+dist
+build
+dev.db
+dev.db-journal
