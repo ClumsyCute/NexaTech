@@ -44,7 +44,7 @@ graph TD
 │   │   └── not-found.tsx  # Custom 404 page
 │   ├── components/        # Reusable Client & Server components (Navbar, Footer, Filter board)
 │   ├── lib/               # Utility functions (Prisma singleton, API wrappers, JWT, PBKDF2 Hashing)
-│   └── middleware.ts      # Route protection & role verification (Admin vs. Candidate)
+│   └── proxy.ts           # Route protection & role verification (Admin vs. Candidate)
 ├── uploads/resumes/       # Secure file system storage for candidate resumes
 ├── package.json
 └── tsconfig.json
@@ -98,7 +98,7 @@ The seed script establishes two default users:
 ## Core Features
 
 1.  **Public Jobs Board**: Multi-select filters for Location, Experience level, and Job Type.
-2.  **Auth & Role Access Control**: Middleware protection intercepting unauthorized routes.
+2.  **Auth & Role Access Control**: Proxy protection intercepting unauthorized routes.
 3.  **PDF Resume Upload**: Validates uploader size/format and streams files securely.
 4.  **Notifications Hub**: In-app center triggering updates on application status changes.
 5.  **Admin Review Workspace**: Full search capabilities, timeline decision updates, and custom messaging triggers.
