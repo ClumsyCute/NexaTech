@@ -23,6 +23,7 @@ import {
   Clock,
   Sparkles,
   Send,
+  Award,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -317,7 +318,16 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
                   </p>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href={`/dashboard/offer/${selectedApp.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-4 py-2 text-xs font-bold transition-all flex items-center gap-2 border border-emerald-500/20 shadow-sm"
+                  >
+                    <Award className="h-3.5 w-3.5" />
+                    Preview Offer
+                  </a>
                   <a
                     href={`/api/admin/resumes/download/${selectedApp.resumePath}`}
                     target="_blank"

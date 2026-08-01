@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma';
 import { verifyToken } from '@/lib/jwt-utils';
-import { Briefcase, Calendar, FileText, ChevronRight, Inbox, Clock, CheckCircle2 } from 'lucide-react';
+import { Briefcase, Calendar, FileText, ChevronRight, Inbox, Clock, CheckCircle2, Award, Sparkles, Download } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -128,50 +128,76 @@ export default async function CandidateDashboardPage() {
 
         {applications.length > 0 ? (
           <div className="divide-y divide-white/5">
-            {applications.map((app) => (
-              <div
-                key={app.id}
-                className="p-8 hover:bg-white/5 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-6 group"
-              >
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">{app.job.title}</h3>
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-zinc-400">
-                    <span className="flex items-center gap-1.5 bg-black/20 px-3 py-1 rounded-full border border-white/5">
-                      <Briefcase className="h-3.5 w-3.5 text-zinc-500" />
-                      {app.job.location} &bull; {app.job.employmentType}
+            {applications.map((app) => {
+              const hasOffer = app.status === 'OFFER_RELEASED' || app.status === 'ACCEPTED';
+              return (
+                <div
+                  key={app.id}
+                  className={`p-8 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-6 group ${
+                    hasOffer
+                      ? 'bg-emerald-500/[0.03] hover:bg-emerald-500/[0.07] border-l-4 border-emerald-500'
+                      : 'hover:bg-white/5'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">
+                        {app.job.title}
+                      </h3>
+                      {hasOffer && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 border border-emerald-500/30 animate-pulse">
+                          <Sparkles className="h-3 w-3" /> Offer Ready
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-zinc-400">
+                      <span className="flex items-center gap-1.5 bg-black/20 px-3 py-1 rounded-full border border-white/5">
+                        <Briefcase className="h-3.5 w-3.5 text-zinc-500" />
+                        {app.job.location} &bull; {app.job.employmentType}
+                      </span>
+                      <span className="flex items-center gap-1.5 bg-black/20 px-3 py-1 rounded-full border border-white/5">
+                        <Calendar className="h-3.5 w-3.5 text-zinc-500" />
+                        Applied: {app.createdAt.toLocaleDateString(undefined, { dateStyle: 'medium' })}
+                      </span>
+                      <span className="flex items-center gap-1.5 bg-black/20 px-3 py-1 rounded-full border border-white/5" title="Submitted PDF file">
+                        <FileText className="h-3.5 w-3.5 text-zinc-500" />
+                        {app.resumePath.split('-').slice(2).join('-') || 'Resume'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3 self-start sm:self-center">
+                    {hasOffer && (
+                      <Link
+                        href={`/dashboard/offer/${app.id}`}
+                        className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-bold text-zinc-950 shadow-[0_0_15px_rgba(16,185,129,0.25)] hover:shadow-[0_0_25px_rgba(16,185,129,0.45)] transition-all hover:scale-105"
+                      >
+                        <Award className="h-4 w-4" />
+                        View & Download Offer Letter
+                      </Link>
+                    )}
+
+                    <span
+                      className={`inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${getStatusStyle(
+                        app.status,
+                      )}`}
+                    >
+                      {getStatusLabel(app.status)}
                     </span>
-                    <span className="flex items-center gap-1.5 bg-black/20 px-3 py-1 rounded-full border border-white/5">
-                      <Calendar className="h-3.5 w-3.5 text-zinc-500" />
-                      Applied: {app.createdAt.toLocaleDateString(undefined, { dateStyle: 'medium' })}
-                    </span>
-                    <span className="flex items-center gap-1.5 bg-black/20 px-3 py-1 rounded-full border border-white/5" title="Submitted PDF file">
-                      <FileText className="h-3.5 w-3.5 text-zinc-500" />
-                      {app.resumePath.split('-').slice(2).join('-') || 'Resume'}
-                    </span>
+                    
+                    {app.job.status === 'OPEN' && (
+                      <Link
+                        href={`/jobs/${app.jobId}`}
+                        className="flex items-center justify-center h-10 w-10 rounded-full bg-white/5 text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10 border border-white/5 transition-all group-hover:scale-110"
+                        title="View Job Details"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </Link>
+                    )}
                   </div>
                 </div>
-
-                <div className="flex items-center gap-4 self-start sm:self-center">
-                  <span
-                    className={`inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${getStatusStyle(
-                      app.status,
-                    )}`}
-                  >
-                    {getStatusLabel(app.status)}
-                  </span>
-                  
-                  {app.job.status === 'OPEN' && (
-                    <Link
-                      href={`/jobs/${app.jobId}`}
-                      className="flex items-center justify-center h-10 w-10 rounded-full bg-white/5 text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10 border border-white/5 transition-all group-hover:scale-110"
-                      title="View Job Details"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </Link>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="text-center py-24 px-4">

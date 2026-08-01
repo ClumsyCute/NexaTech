@@ -188,25 +188,80 @@ NexaTech is looking for a Product Designer to establish our brand style guide an
     },
   ];
 
+  const createdJobs = [];
   for (const jobData of jobsData) {
     const job = await prisma.job.create({
       data: jobData,
     });
+    createdJobs.push(job);
     console.log(`💼 Created Job Opening: ${job.title} (${job.location})`);
   }
 
-  // 4. Create sample Notification for candidate
+  // 4. Create Sample Applications for Candidate
+  const offerApp = await prisma.application.create({
+    data: {
+      candidateId: candidate.id,
+      jobId: createdJobs[0].id,
+      name: 'John Doe',
+      email: 'candidate@example.com',
+      phone: '+1 (555) 234-5678',
+      address: '742 Evergreen Terrace, San Francisco, CA 94107',
+      resumePath: `${candidate.id}-1710000000000-John_Doe_Senior_Staff_Engineer.pdf`,
+      linkedIn: 'https://linkedin.com/in/johndoe-dev',
+      gitHub: 'https://github.com/johndoe-dev',
+      portfolio: 'https://johndoe.dev',
+      yearsOfExperience: 6,
+      skills: 'React, Next.js, TypeScript, Distributed Systems, Node.js, GraphQL, Tailwind CSS',
+      currentCompany: 'Apex Cloud Systems',
+      currentCtc: '$145,000',
+      expectedCtc: '$165,000',
+      noticePeriod: '2 Weeks',
+      coverLetter: 'I am thrilled to apply for the Senior Full Stack Engineer role at NexaTech. Having spent 6 years scaling real-time web applications and designing resilient developer infrastructure, I would love to bring my experience to your engineering organization.',
+      status: 'OFFER_RELEASED',
+    },
+  });
+
+  const interviewApp = await prisma.application.create({
+    data: {
+      candidateId: candidate.id,
+      jobId: createdJobs[2].id,
+      name: 'John Doe',
+      email: 'candidate@example.com',
+      phone: '+1 (555) 234-5678',
+      address: '742 Evergreen Terrace, San Francisco, CA 94107',
+      resumePath: `${candidate.id}-1710000000001-John_Doe_AI_Engineer.pdf`,
+      yearsOfExperience: 5,
+      skills: 'Python, PyTorch, LLMs, LangChain, Next.js',
+      currentCompany: 'Apex Cloud Systems',
+      currentCtc: '$145,000',
+      expectedCtc: '$170,000',
+      noticePeriod: '1 Month',
+      status: 'INTERVIEW_SCHEDULED',
+    },
+  });
+
+  // 5. Create sample Notifications for candidate
   await prisma.notification.create({
     data: {
       userId: candidate.id,
-      title: 'Welcome to NexaTech!',
-      message: 'Thank you for creating an account on the NexaTech Careers portal. Explore our open positions and apply today!',
-      type: 'CUSTOM',
+      title: 'Offer Released! 💌',
+      message: `Congratulations! NexaTech has released an official employment offer for the "${createdJobs[0].title}" position. Please review and download your offer letter in your candidate dashboard.`,
+      type: 'STATUS_CHANGE',
       isRead: false,
     },
   });
 
-  console.log('🎉 Seeding successfully completed!');
+  await prisma.notification.create({
+    data: {
+      userId: candidate.id,
+      title: 'Interview Scheduled! 📅',
+      message: `An interview has been scheduled for your application to "${createdJobs[2].title}". Please check your calendar invitation details.`,
+      type: 'STATUS_CHANGE',
+      isRead: false,
+    },
+  });
+
+  console.log('🎉 Seeding successfully completed with sample applications and notifications!');
 }
 
 main()

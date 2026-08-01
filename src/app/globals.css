@@ -275,3 +275,28 @@ textarea {
   color: #f87171;
   border: 1px solid rgba(248, 113, 113, 0.2);
 }
+
+/* ─── Print Media Styles for Official Documents ─── */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  nav, footer, .print\:hidden {
+    display: none !important;
+  }
+  #offer-letter-document {
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+  @page {
+    margin: 1.5cm;
+  }
+}
+
