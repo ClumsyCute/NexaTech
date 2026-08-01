@@ -21,7 +21,10 @@ import {
   Building,
   DollarSign,
   Clock,
+  Sparkles,
+  Send,
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Job {
   id: string;
@@ -163,48 +166,52 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
       case 'SUBMITTED':
-        return 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-900';
+        return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
       case 'SHORTLISTED':
-        return 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/20 dark:text-purple-400 dark:border-purple-900';
+        return 'bg-purple-500/10 text-purple-400 border-purple-500/20';
       case 'INTERVIEW_SCHEDULED':
-        return 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/20 dark:text-blue-400 dark:border-blue-900';
+        return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
       case 'OFFER_RELEASED':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400';
       case 'ACCEPTED':
-        return 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300';
+        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
       case 'REJECTED':
-        return 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900';
+        return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
       default:
-        return 'bg-slate-50 text-slate-700 border-slate-200';
+        return 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
     }
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 flex flex-col h-[calc(100vh-4rem)]">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 flex flex-col h-[calc(100vh-4rem)] pt-20">
       {/* Search Header */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-between items-center pb-6 border-b border-slate-200 dark:border-slate-800 mb-6">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center pb-6 border-b border-white/5 mb-6">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white">Review Pipeline</h1>
-          <p className="text-xs text-slate-550 dark:text-slate-400 mt-0.5">Filter candidates, download resumes, and manage interview schedules.</p>
+          <div className="flex items-center gap-2 mb-1">
+            <h1 className="text-2xl font-bold tracking-tight text-white">Review Pipeline</h1>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              Admin Portal
+            </span>
+          </div>
+          <p className="text-xs text-zinc-400">Filter candidates, download resumes, and manage interview schedules with realtime updates.</p>
         </div>
-        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+        <div className="flex flex-wrap gap-2.5 w-full sm:w-auto">
           {/* Search Box */}
           <div className="relative flex-grow sm:flex-grow-0">
             <input
               type="text"
-              placeholder="Search candidate..."
+              placeholder="Search candidate or skill..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full sm:w-60 rounded-lg border border-slate-200 py-1.5 pl-8 pr-3 text-xs text-slate-950 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full sm:w-64 rounded-xl border border-white/10 py-2 pl-9 pr-3 text-xs text-white bg-white/[0.03] focus:border-emerald-500/50 focus:bg-white/[0.06] focus:outline-none placeholder:text-zinc-500 transition-all"
             />
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-zinc-500" />
           </div>
 
           {/* Role Filter */}
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="rounded-lg border border-slate-200 py-1.5 px-2.5 text-xs text-slate-700 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+            className="rounded-xl border border-white/10 py-2 px-3 text-xs text-zinc-300 bg-zinc-900 focus:border-emerald-500/50 focus:outline-none transition-all cursor-pointer"
           >
             <option value="ALL">All Roles</option>
             {rolesList.map((title) => (
@@ -218,7 +225,7 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-lg border border-slate-200 py-1.5 px-2.5 text-xs text-slate-700 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+            className="rounded-xl border border-white/10 py-2 px-3 text-xs text-zinc-300 bg-zinc-900 focus:border-emerald-500/50 focus:outline-none transition-all cursor-pointer"
           >
             <option value="ALL">All Statuses</option>
             <option value="SUBMITTED">Submitted</option>
@@ -232,72 +239,81 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
       </div>
 
       {/* Main Grid: Master-Detail */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-grow overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow overflow-hidden">
         {/* Left Column: Candidates list */}
-        <div className="lg:col-span-1 border border-slate-200 bg-white rounded-2xl dark:border-slate-800 dark:bg-slate-900 overflow-y-auto flex flex-col max-h-[300px] lg:max-h-full">
-          <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-slate-900 z-10">
-            <span className="text-xs font-semibold text-slate-500">
+        <div className="lg:col-span-4 glass-card rounded-2xl overflow-y-auto flex flex-col max-h-[320px] lg:max-h-full border border-white/10">
+          <div className="px-5 py-3.5 border-b border-white/5 sticky top-0 bg-zinc-950/80 backdrop-blur-md z-10 flex items-center justify-between">
+            <span className="text-xs font-semibold text-zinc-400">
               Applications ({filteredApps.length})
             </span>
+            <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-400">Live</span>
           </div>
 
           {filteredApps.length > 0 ? (
-            <div className="divide-y divide-slate-100 dark:divide-slate-850 flex-grow">
+            <div className="divide-y divide-white/5 flex-grow">
               {filteredApps.map((app) => (
                 <button
                   key={app.id}
                   onClick={() => setSelectedAppId(app.id)}
-                  className={`w-full text-left p-4 hover:bg-slate-50/50 dark:hover:bg-slate-950/20 transition-all flex flex-col gap-1 ${
+                  className={`w-full text-left p-4 hover:bg-white/[0.04] transition-all flex flex-col gap-1.5 relative ${
                     selectedAppId === app.id
-                      ? 'bg-indigo-50/30 border-l-4 border-indigo-650 dark:bg-indigo-950/10'
-                      : 'border-l-4 border-transparent'
+                      ? 'bg-emerald-500/[0.07] border-l-2 border-emerald-400 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]'
+                      : 'border-l-2 border-transparent'
                   }`}
                 >
                   <div className="flex justify-between items-start gap-2">
-                    <h3 className="font-bold text-slate-900 dark:text-white text-sm truncate max-w-[150px]">
+                    <h3 className="font-semibold text-white text-sm truncate max-w-[170px]">
                       {app.name}
                     </h3>
                     <span
-                      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider ${getStatusBadgeClass(
+                      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${getStatusBadgeClass(
                         app.status,
                       )}`}
                     >
                       {app.status.replace(/_/g, ' ')}
                     </span>
                   </div>
-                  <p className="text-xs text-indigo-655 dark:text-indigo-400 font-semibold truncate">
+                  <p className="text-xs text-zinc-400 truncate">
                     {app.job.title}
                   </p>
-                  <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1">
-                    <span>Exp: {app.yearsOfExperience} yrs</span>
-                    <span>{new Date(app.createdAt).toLocaleDateString()}</span>
+                  <div className="flex items-center justify-between text-[11px] text-zinc-500 mt-1">
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-zinc-600" />
+                      {app.yearsOfExperience} yrs exp
+                    </span>
+                    <span>{new Date(app.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
                   </div>
                 </button>
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 flex-grow flex flex-col justify-center">
-              <Inbox className="mx-auto h-8 w-8 text-slate-350" />
-              <p className="text-xs text-slate-500 mt-2">No applications match criteria.</p>
+            <div className="text-center py-16 flex-grow flex flex-col justify-center items-center">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-3">
+                <Inbox className="h-6 w-6 text-zinc-500" />
+              </div>
+              <p className="text-xs text-zinc-400 font-medium">No applications match your criteria.</p>
             </div>
           )}
         </div>
 
         {/* Right Column: Candidate review sheet */}
-        <div className="lg:col-span-2 border border-slate-200 bg-white rounded-2xl dark:border-slate-800 dark:bg-slate-900 overflow-y-auto max-h-[calc(100vh-16rem)] lg:max-h-full">
+        <div className="lg:col-span-8 glass-card rounded-2xl overflow-y-auto max-h-[calc(100vh-16rem)] lg:max-h-full border border-white/10">
           {selectedApp ? (
-            <div className="p-8 space-y-8">
+            <div className="p-6 sm:p-8 space-y-8">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-slate-100 dark:border-slate-805 pb-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-white/5 pb-6">
                 <div>
-                  <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-semibold text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400">
-                    {selectedApp.job.title}
-                  </span>
-                  <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mt-2">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="inline-flex items-center rounded-lg bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/20">
+                      {selectedApp.job.title}
+                    </span>
+                    <span className="text-xs text-zinc-500">• {selectedApp.job.location}</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-white tracking-tight">
                     {selectedApp.name}
                   </h2>
-                  <p className="text-xs text-slate-400 font-medium">
-                    Applied: {new Date(selectedApp.createdAt).toLocaleString(undefined, { dateStyle: 'long', timeStyle: 'short' })}
+                  <p className="text-xs text-zinc-400 mt-1">
+                    Submitted on {new Date(selectedApp.createdAt).toLocaleString(undefined, { dateStyle: 'long', timeStyle: 'short' })}
                   </p>
                 </div>
 
@@ -306,33 +322,36 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
                     href={`/api/admin/resumes/download/${selectedApp.resumePath}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-lg bg-indigo-50 px-4 py-2.5 text-xs font-bold text-indigo-755 hover:bg-indigo-100 transition-colors flex items-center gap-1 dark:bg-indigo-950/40 dark:text-indigo-400 dark:hover:bg-indigo-900/40"
+                    className="rounded-xl bg-white/10 hover:bg-emerald-500 hover:text-zinc-950 text-white px-4 py-2 text-xs font-bold transition-all flex items-center gap-2 border border-white/10 shadow-sm"
                   >
-                    <Download className="h-4 w-4" />
-                    Open PDF Resume
+                    <Download className="h-3.5 w-3.5" />
+                    Download Resume
                   </a>
                 </div>
               </div>
 
               {/* Grid detail cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Contact Card */}
-                <div className="rounded-xl border border-slate-150 p-5 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Contact Details</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-slate-650 dark:text-slate-350">
-                      <Mail className="h-4 w-4 text-slate-400 flex-shrink-0" />
-                      <a href={`mailto:${selectedApp.email}`} className="hover:text-indigo-650 hover:underline">
+                <div className="rounded-2xl border border-white/5 p-5 bg-white/[0.02]">
+                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-3.5 flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-emerald-400" />
+                    Contact Information
+                  </h3>
+                  <div className="space-y-2.5 text-xs">
+                    <div className="flex items-center gap-2.5 text-zinc-300">
+                      <Mail className="h-4 w-4 text-zinc-500 flex-shrink-0" />
+                      <a href={`mailto:${selectedApp.email}`} className="hover:text-emerald-400 hover:underline transition-colors">
                         {selectedApp.email}
                       </a>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-650 dark:text-slate-350">
-                      <Phone className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                    <div className="flex items-center gap-2.5 text-zinc-300">
+                      <Phone className="h-4 w-4 text-zinc-500 flex-shrink-0" />
                       <span>{selectedApp.phone}</span>
                     </div>
                     {selectedApp.address && (
-                      <div className="flex items-center gap-2 text-slate-650 dark:text-slate-350">
-                        <MapPin className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                      <div className="flex items-center gap-2.5 text-zinc-300">
+                        <MapPin className="h-4 w-4 text-zinc-500 flex-shrink-0" />
                         <span>{selectedApp.address}</span>
                       </div>
                     )}
@@ -340,27 +359,30 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
                 </div>
 
                 {/* Professional details */}
-                <div className="rounded-xl border border-slate-150 p-5 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Professional Stats</h3>
-                  <div className="space-y-2 text-sm text-slate-650 dark:text-slate-350">
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Total Experience:</span>
-                      <span className="font-semibold text-slate-900 dark:text-white">{selectedApp.yearsOfExperience} years</span>
+                <div className="rounded-2xl border border-white/5 p-5 bg-white/[0.02]">
+                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-3.5 flex items-center gap-1.5">
+                    <Briefcase className="w-3.5 h-3.5 text-cyan-400" />
+                    Professional Background
+                  </h3>
+                  <div className="space-y-2 text-xs text-zinc-300">
+                    <div className="flex justify-between py-0.5">
+                      <span className="text-zinc-500">Total Experience:</span>
+                      <span className="font-semibold text-white">{selectedApp.yearsOfExperience} years</span>
                     </div>
                     {selectedApp.currentCompany && (
-                      <div className="flex justify-between">
-                        <span className="text-slate-400">Current Company:</span>
-                        <span className="font-semibold text-slate-900 dark:text-white">{selectedApp.currentCompany}</span>
+                      <div className="flex justify-between py-0.5">
+                        <span className="text-zinc-500">Current Company:</span>
+                        <span className="font-semibold text-white">{selectedApp.currentCompany}</span>
                       </div>
                     )}
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Notice Period:</span>
-                      <span className="font-semibold text-slate-900 dark:text-white">{selectedApp.noticePeriod || 'N/A'}</span>
+                    <div className="flex justify-between py-0.5">
+                      <span className="text-zinc-500">Notice Period:</span>
+                      <span className="font-semibold text-white">{selectedApp.noticePeriod || 'Immediate'}</span>
                     </div>
                     {(selectedApp.currentCtc || selectedApp.expectedCtc) && (
-                      <div className="flex justify-between pt-1 border-t border-slate-200/60 dark:border-slate-800">
-                        <span className="text-slate-400">CTC (Curr / Exp):</span>
-                        <span className="font-semibold text-slate-900 dark:text-white">
+                      <div className="flex justify-between pt-2 border-t border-white/5">
+                        <span className="text-zinc-500">CTC (Curr / Exp):</span>
+                        <span className="font-semibold text-emerald-400">
                           {selectedApp.currentCtc || 'N/A'} / {selectedApp.expectedCtc || 'N/A'}
                         </span>
                       </div>
@@ -372,17 +394,17 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
               {/* Profiles */}
               {(selectedApp.linkedIn || selectedApp.gitHub || selectedApp.portfolio) && (
                 <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-450 mb-3">Social & Portfolios</h3>
+                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-3">Links & Online Presence</h3>
                   <div className="flex flex-wrap gap-2.5">
                     {selectedApp.linkedIn && (
                       <a
                         href={selectedApp.linkedIn}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-xs text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 transition-colors"
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs text-zinc-300 hover:bg-white/[0.08] hover:text-white transition-colors"
                       >
                         LinkedIn
-                        <ExternalLink className="h-3 w-3" />
+                        <ExternalLink className="h-3 w-3 text-zinc-500" />
                       </a>
                     )}
                     {selectedApp.gitHub && (
@@ -390,10 +412,10 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
                         href={selectedApp.gitHub}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-xs text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 transition-colors"
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs text-zinc-300 hover:bg-white/[0.08] hover:text-white transition-colors"
                       >
                         GitHub
-                        <ExternalLink className="h-3 w-3" />
+                        <ExternalLink className="h-3 w-3 text-zinc-500" />
                       </a>
                     )}
                     {selectedApp.portfolio && (
@@ -401,10 +423,10 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
                         href={selectedApp.portfolio}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-1.5 text-xs text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 transition-colors"
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs text-zinc-300 hover:bg-white/[0.08] hover:text-white transition-colors"
                       >
                         Portfolio
-                        <ExternalLink className="h-3 w-3" />
+                        <ExternalLink className="h-3 w-3 text-zinc-500" />
                       </a>
                     )}
                   </div>
@@ -413,12 +435,12 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
 
               {/* Skills Tags */}
               <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-455 mb-2">Core Skills</h3>
-                <div className="flex flex-wrap gap-1.5">
+                <h3 className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-2.5">Tagged Skills</h3>
+                <div className="flex flex-wrap gap-2">
                   {selectedApp.skills.split(',').map((skill) => (
                     <span
                       key={skill}
-                      className="inline-flex items-center rounded-full bg-indigo-50/50 px-3 py-1 text-xs text-indigo-755 border border-indigo-100 dark:bg-indigo-950/20 dark:text-indigo-400 dark:border-indigo-900"
+                      className="inline-flex items-center rounded-xl bg-white/[0.04] px-3 py-1 text-xs text-zinc-200 border border-white/10"
                     >
                       {skill.trim()}
                     </span>
@@ -429,41 +451,52 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
               {/* Cover Letter */}
               {selectedApp.coverLetter && (
                 <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-455 mb-2">Cover Letter</h3>
-                  <div className="rounded-xl border border-slate-150 p-5 bg-slate-50/30 text-sm text-slate-650 dark:border-slate-800 dark:bg-slate-950/20 dark:text-slate-350 whitespace-pre-wrap leading-relaxed">
+                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-2.5">Cover Letter</h3>
+                  <div className="rounded-2xl border border-white/5 p-5 bg-white/[0.02] text-xs text-zinc-300 whitespace-pre-wrap leading-relaxed">
                     {selectedApp.coverLetter}
                   </div>
                 </div>
               )}
 
               {/* Action Update Form */}
-              <div className="border-t border-slate-200 dark:border-slate-800 pt-6">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4">Application Decision & Notes</h3>
+              <div className="border-t border-white/5 pt-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <h3 className="text-sm font-bold text-white">Application Decision & Notifications</h3>
+                </div>
                 
                 <form onSubmit={handleUpdateApplication} className="space-y-4">
                   {updateSuccess && (
-                    <div className="flex items-center gap-2 rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 border border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900">
-                      <CheckCircle className="h-5 w-5 flex-shrink-0" />
-                      <span>Application decision saved and candidate notified successfully.</span>
-                    </div>
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-2.5 rounded-xl bg-emerald-500/10 p-4 text-xs text-emerald-400 border border-emerald-500/20"
+                    >
+                      <CheckCircle className="h-4 w-4 flex-shrink-0" />
+                      <span>Application decision saved and candidate notified automatically.</span>
+                    </motion.div>
                   )}
 
                   {updateError && (
-                    <div className="flex items-center gap-2 rounded-lg bg-rose-50 p-4 text-sm text-rose-700 border border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900">
-                      <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-2.5 rounded-xl bg-rose-500/10 p-4 text-xs text-rose-400 border border-rose-500/20"
+                    >
+                      <AlertCircle className="h-4 w-4 flex-shrink-0" />
                       <span>{updateError}</span>
-                    </div>
+                    </motion.div>
                   )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="sm:col-span-1">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                      <label className="block text-[11px] font-semibold text-zinc-400 mb-1.5">
                         Pipeline Status
                       </label>
                       <select
                         value={updateStatus}
                         onChange={(e) => setUpdateStatus(e.target.value)}
-                        className="w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-950 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+                        className="w-full rounded-xl border border-white/10 py-2.5 px-3.5 text-xs text-white bg-zinc-900 focus:border-emerald-500/50 focus:outline-none transition-all cursor-pointer"
                       >
                         <option value="SUBMITTED">Submitted</option>
                         <option value="SHORTLISTED">Shortlist</option>
@@ -475,32 +508,35 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
                     </div>
 
                     <div className="sm:col-span-2">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                        Message / Custom Notification (Optional)
+                      <label className="block text-[11px] font-semibold text-zinc-400 mb-1.5">
+                        Custom Notification to Candidate (Optional)
                       </label>
                       <input
                         type="text"
-                        placeholder="Add a custom update message sent directly to the candidate..."
+                        placeholder="e.g., 'We loved your profile and would like to set up an interview this Thursday.'"
                         value={customNotification}
                         onChange={(e) => setCustomNotification(e.target.value)}
-                        className="w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+                        className="w-full rounded-xl border border-white/10 py-2.5 px-3.5 text-xs text-white bg-white/[0.03] focus:border-emerald-500/50 focus:bg-white/[0.06] focus:outline-none placeholder:text-zinc-600 transition-all"
                       />
                     </div>
                   </div>
 
-                  <div className="flex justify-end">
+                  <div className="flex justify-end pt-2">
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="rounded-lg bg-indigo-650 px-5 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-600 disabled:opacity-50 transition-colors flex items-center gap-1.5"
+                      className="rounded-xl bg-emerald-500 px-5 py-2.5 text-xs font-bold text-zinc-950 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] disabled:opacity-50 transition-all hover:scale-[1.02] flex items-center gap-2 cursor-pointer"
                     >
                       {submitting ? (
                         <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          Saving...
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          Saving changes...
                         </>
                       ) : (
-                        'Save Action & Notify'
+                        <>
+                          <Send className="h-3.5 w-3.5" />
+                          Update & Notify
+                        </>
                       )}
                     </button>
                   </div>
@@ -508,11 +544,13 @@ export default function ApplicationsPanelClient({ initialApplications }: Applica
               </div>
             </div>
           ) : (
-            <div className="text-center py-24 flex flex-col justify-center h-full">
-              <User className="mx-auto h-12 w-12 text-slate-350" />
-              <h3 className="mt-2 text-sm font-semibold text-slate-900 dark:text-white">No candidate selected</h3>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                Select an applicant from the left pane to review their details.
+            <div className="text-center py-28 flex flex-col justify-center items-center h-full">
+              <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-3">
+                <User className="h-7 w-7 text-zinc-500" />
+              </div>
+              <h3 className="text-sm font-semibold text-white">No candidate selected</h3>
+              <p className="mt-1 text-xs text-zinc-400 max-w-xs">
+                Select an applicant from the left pane to review their background, skills, and resume.
               </p>
             </div>
           )}

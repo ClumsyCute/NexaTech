@@ -109,12 +109,13 @@ export default function ApplyFormClient({ jobId, candidateName, candidateEmail }
 
   if (success) {
     return (
-      <div className="text-center py-8">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 mb-4">
-          <FileCheck className="h-6 w-6" />
+      <div className="text-center py-12">
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-6 relative">
+          <div className="absolute inset-0 rounded-full bg-emerald-500/20 animate-ping" />
+          <FileCheck className="h-10 w-10 relative z-10" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Application Submitted!</h2>
-        <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+        <h2 className="text-3xl font-bold text-white mb-3">Application Submitted!</h2>
+        <p className="text-zinc-400 max-w-md mx-auto">
           Thank you for applying. We are redirecting you to your candidate dashboard to track progress...
         </p>
       </div>
@@ -122,116 +123,125 @@ export default function ApplyFormClient({ jobId, candidateName, candidateEmail }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className="space-y-10 relative z-10">
       {error && (
-        <div className="flex items-center gap-2 rounded-lg bg-rose-50 p-4 text-sm text-rose-700 border border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900">
+        <div className="flex items-center gap-3 rounded-xl bg-red-500/10 p-5 text-sm text-red-400 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
           <AlertCircle className="h-5 w-5 flex-shrink-0" />
-          <span>{error}</span>
+          <span className="font-medium">{error}</span>
         </div>
       )}
 
       {/* Section 1: Personal Details */}
       <div>
-        <h3 className="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-4">
-          1. Personal Details
-        </h3>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 font-bold text-sm border border-emerald-500/20">1</div>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-white">
+            Personal Details
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 bg-black/20 p-6 rounded-2xl border border-white/5">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Full Name *</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Full Name *</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Email Address *</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Email Address *</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Phone Number *</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Phone Number *</label>
             <input
               type="tel"
               required
               placeholder="+1 (555) 000-0000"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Address</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Address</label>
             <input
               type="text"
               placeholder="City, Country"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
         </div>
       </div>
 
       {/* Section 2: Profiles & Links */}
-      <div className="border-t border-slate-200 dark:border-slate-800 pt-6">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-4">
-          2. Profiles & Links
-        </h3>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+      <div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 font-bold text-sm border border-emerald-500/20">2</div>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-white">
+            Profiles & Links
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 bg-black/20 p-6 rounded-2xl border border-white/5">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">LinkedIn URL</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">LinkedIn URL</label>
             <input
               type="url"
               placeholder="https://linkedin.com/in/username"
               value={linkedIn}
               onChange={(e) => setLinkedIn(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">GitHub URL</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">GitHub URL</label>
             <input
               type="url"
               placeholder="https://github.com/username"
               value={gitHub}
               onChange={(e) => setGitHub(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Portfolio URL</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Portfolio URL</label>
             <input
               type="url"
               placeholder="https://portfolio.me"
               value={portfolio}
               onChange={(e) => setPortfolio(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
         </div>
       </div>
 
       {/* Section 3: Professional Experience */}
-      <div className="border-t border-slate-200 dark:border-slate-800 pt-6">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-4">
-          3. Professional Experience
-        </h3>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 font-bold text-sm border border-emerald-500/20">3</div>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-white">
+            Professional Experience
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 bg-black/20 p-6 rounded-2xl border border-white/5">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Years of Experience *</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Years of Experience *</label>
             <input
               type="number"
               step="0.1"
@@ -239,103 +249,109 @@ export default function ApplyFormClient({ jobId, candidateName, candidateEmail }
               placeholder="e.g. 3.5"
               value={yearsOfExperience}
               onChange={(e) => setYearsOfExperience(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Core Skills *</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Core Skills *</label>
             <input
               type="text"
               required
-              placeholder="React, TypeScript, Node.js (comma-separated)"
+              placeholder="React, TypeScript, Node.js"
               value={skills}
               onChange={(e) => setSkills(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Current Company</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Current Company</label>
             <input
               type="text"
               placeholder="e.g. Acme Corp"
               value={currentCompany}
               onChange={(e) => setCurrentCompany(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Notice Period</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Notice Period</label>
             <select
               value={noticePeriod}
               onChange={(e) => setNoticePeriod(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all appearance-none"
             >
-              <option value="Immediate">Immediate</option>
-              <option value="15 days">15 days</option>
-              <option value="30 days">30 days</option>
-              <option value="60 days">60 days</option>
-              <option value="90 days">90 days</option>
+              <option value="Immediate" className="bg-zinc-900">Immediate</option>
+              <option value="15 days" className="bg-zinc-900">15 days</option>
+              <option value="30 days" className="bg-zinc-900">30 days</option>
+              <option value="60 days" className="bg-zinc-900">60 days</option>
+              <option value="90 days" className="bg-zinc-900">90 days</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Current Salary / CTC</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Current Salary / CTC</label>
             <input
               type="text"
               placeholder="e.g. $110,000 / yr"
               value={currentCtc}
               onChange={(e) => setCurrentCtc(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Expected Salary / CTC</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Expected Salary / CTC</label>
             <input
               type="text"
               placeholder="e.g. $135,000 / yr"
               value={expectedCtc}
               onChange={(e) => setExpectedCtc(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
             />
           </div>
         </div>
       </div>
 
       {/* Section 4: Resume & Cover Letter */}
-      <div className="border-t border-slate-200 dark:border-slate-800 pt-6">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-4">
-          4. Resume & Cover Letter
-        </h3>
-        <div className="space-y-6">
+      <div>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 font-bold text-sm border border-emerald-500/20">4</div>
+          <h3 className="text-sm font-bold uppercase tracking-widest text-white">
+            Resume & Cover Letter
+          </h3>
+        </div>
+        <div className="space-y-6 bg-black/20 p-6 rounded-2xl border border-white/5">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Upload PDF Resume *</label>
-            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-slate-300 px-6 py-10 dark:border-slate-850 bg-slate-50/50 dark:bg-slate-950/20">
-              <div className="text-center">
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Upload PDF Resume *</label>
+            <div className="mt-2 flex justify-center rounded-xl border-2 border-dashed border-white/10 px-6 py-12 bg-white/5 hover:bg-white/10 hover:border-emerald-500/50 transition-all group relative">
+              <input type="file" accept=".pdf" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onChange={handleFileChange} />
+              
+              <div className="text-center pointer-events-none">
                 {resume ? (
                   <div className="flex flex-col items-center">
-                    <FileCheck className="mx-auto h-12 w-12 text-indigo-600 dark:text-indigo-400" />
-                    <p className="mt-4 text-sm font-semibold text-slate-900 dark:text-white">{resume.name}</p>
-                    <p className="text-xs text-slate-500">{(resume.size / 1024 / 1024).toFixed(2)} MB &bull; PDF format</p>
-                    <label className="mt-4 cursor-pointer text-xs font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
-                      Change Resume
-                      <input type="file" accept=".pdf" className="sr-only" onChange={handleFileChange} />
-                    </label>
+                    <div className="h-16 w-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4">
+                      <FileCheck className="h-8 w-8 text-emerald-400" />
+                    </div>
+                    <p className="text-sm font-bold text-white mb-1">{resume.name}</p>
+                    <p className="text-xs text-zinc-500">{(resume.size / 1024 / 1024).toFixed(2)} MB &bull; PDF format</p>
+                    <span className="mt-4 inline-block text-xs font-semibold text-emerald-400 group-hover:text-emerald-300">
+                      Click or drag to replace
+                    </span>
                   </div>
                 ) : (
                   <>
-                    <Upload className="mx-auto h-12 w-12 text-slate-400" />
-                    <div className="mt-4 flex text-sm text-slate-650 justify-center">
-                      <label className="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 hover:text-indigo-500 focus-within:outline-none dark:text-indigo-400">
-                        <span>Upload a file</span>
-                        <input type="file" accept=".pdf" className="sr-only" onChange={handleFileChange} />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
+                    <div className="h-16 w-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4 mx-auto group-hover:scale-110 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 group-hover:text-emerald-400 transition-all duration-300">
+                      <Upload className="h-7 w-7 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
                     </div>
-                    <p className="text-xs text-slate-500">PDF up to 10MB</p>
+                    <div className="mt-4 flex flex-col items-center text-sm">
+                      <span className="font-semibold text-white group-hover:text-emerald-400 transition-colors mb-1">
+                        Click to upload or drag and drop
+                      </span>
+                      <p className="text-xs text-zinc-500">PDF up to 10MB</p>
+                    </div>
                   </>
                 )}
               </div>
@@ -343,35 +359,35 @@ export default function ApplyFormClient({ jobId, candidateName, candidateEmail }
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Cover Letter</label>
+            <label className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">Cover Letter</label>
             <textarea
               rows={4}
               placeholder="Introduce yourself and explain why you want to join NexaTech..."
               value={coverLetter}
               onChange={(e) => setCoverLetter(e.target.value)}
-              className="mt-2 block w-full rounded-lg border border-slate-200 py-2.5 px-3.5 text-sm text-slate-955 bg-slate-50 focus:border-indigo-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+              className="w-full rounded-xl border border-white/10 py-3 px-4 text-sm text-white bg-white/5 focus:border-emerald-500/50 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600 resize-none"
             />
           </div>
         </div>
       </div>
 
       {/* Action CTA */}
-      <div className="border-t border-slate-200 dark:border-slate-800 pt-6 flex items-center justify-end gap-4">
+      <div className="border-t border-white/10 pt-8 flex items-center justify-end gap-4">
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
+          className="rounded-xl border border-white/10 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 disabled:opacity-50 transition-colors flex items-center gap-1.5"
+          className="rounded-xl bg-emerald-500 px-8 py-3.5 text-sm font-bold text-zinc-950 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] disabled:opacity-50 transition-all flex items-center gap-2 hover:scale-105 disabled:hover:scale-100"
         >
           {loading ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-5 w-5 animate-spin" />
               Submitting...
             </>
           ) : (

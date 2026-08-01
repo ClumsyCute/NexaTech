@@ -43,42 +43,45 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-slate-50 dark:bg-slate-950">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Link href="/" className="flex justify-center items-center gap-2 mb-6">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 text-white shadow-md">
-            <Briefcase className="h-5 w-5" />
+    <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8 min-h-screen relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+        <Link href="/" className="flex justify-center items-center gap-3 mb-8 group">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/20 transition-all duration-300 group-hover:scale-110">
+            <Briefcase className="h-6 w-6" />
           </div>
-          <span className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Nexa<span className="text-indigo-600 dark:text-indigo-400">Tech</span>
+          <span className="text-3xl font-extrabold tracking-tight text-white">
+            Nexa<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Tech</span>
           </span>
         </Link>
-        <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-slate-900 dark:text-white">
+        <h2 className="text-center text-3xl font-bold leading-9 tracking-tight text-white mb-2">
           Create your careers profile
         </h2>
-        <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-center text-sm text-zinc-400">
           Already registered?{' '}
-          <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">
+          <Link href="/login" className="font-bold text-emerald-400 hover:text-emerald-300 transition-colors">
             Sign in here
           </Link>
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-sm border border-slate-200/80 rounded-2xl dark:bg-slate-900 dark:border-slate-800 sm:px-10">
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+        <div className="glass-card py-10 px-6 sm:px-10 rounded-3xl">
           {error && (
-            <div className="mb-4 flex items-center gap-2 rounded-lg bg-rose-50 p-4 text-sm text-rose-700 border border-rose-200 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900">
+            <div className="mb-6 flex items-center gap-3 rounded-xl bg-red-500/10 p-5 text-sm text-red-400 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
               <AlertCircle className="h-5 w-5 flex-shrink-0" />
-              <span>{error}</span>
+              <span className="font-medium">{error}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <label htmlFor="name" className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">
                 Full Name
               </label>
-              <div className="mt-2 relative">
+              <div className="relative group">
                 <input
                   id="name"
                   name="name"
@@ -86,18 +89,18 @@ export default function SignupPage() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="block w-full rounded-lg border border-slate-200 py-2.5 pl-10 pr-4 text-sm text-slate-950 bg-slate-50 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-slate-850 dark:bg-slate-950 dark:text-white"
+                  className="block w-full rounded-xl border border-white/10 py-3.5 pl-11 pr-4 text-sm text-white bg-black/20 focus:border-emerald-500/50 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
                   placeholder="John Doe"
                 />
-                <User className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-slate-400" />
+                <User className="absolute left-4 top-3.5 h-5 w-5 text-zinc-500 group-focus-within:text-emerald-400 transition-colors" />
               </div>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <label htmlFor="email" className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">
                 Email address
               </label>
-              <div className="mt-2 relative">
+              <div className="relative group">
                 <input
                   id="email"
                   name="email"
@@ -106,18 +109,18 @@ export default function SignupPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-lg border border-slate-200 py-2.5 pl-10 pr-4 text-sm text-slate-950 bg-slate-50 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-slate-850 dark:bg-slate-950 dark:text-white"
+                  className="block w-full rounded-xl border border-white/10 py-3.5 pl-11 pr-4 text-sm text-white bg-black/20 focus:border-emerald-500/50 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
                   placeholder="name@example.com"
                 />
-                <Mail className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-slate-400" />
+                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-zinc-500 group-focus-within:text-emerald-400 transition-colors" />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <label htmlFor="password" className="block text-[11px] uppercase tracking-wider font-semibold text-zinc-500 mb-2">
                 Password
               </label>
-              <div className="mt-2 relative">
+              <div className="relative group">
                 <input
                   id="password"
                   name="password"
@@ -125,24 +128,24 @@ export default function SignupPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full rounded-lg border border-slate-200 py-2.5 pl-10 pr-4 text-sm text-slate-950 bg-slate-50 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-slate-850 dark:bg-slate-950 dark:text-white"
+                  className="block w-full rounded-xl border border-white/10 py-3.5 pl-11 pr-4 text-sm text-white bg-black/20 focus:border-emerald-500/50 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
                   placeholder="Minimum 6 characters"
                 />
-                <Lock className="absolute left-3.5 top-3.5 h-4.5 w-4.5 text-slate-400" />
+                <Lock className="absolute left-4 top-3.5 h-5 w-5 text-zinc-500 group-focus-within:text-emerald-400 transition-colors" />
               </div>
             </div>
 
-            <div>
+            <div className="pt-2">
               <button
                 type="submit"
                 disabled={loading}
-                className="flex w-full justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
+                className="flex w-full justify-center items-center gap-2 rounded-xl bg-emerald-500 px-4 py-3.5 text-sm font-bold text-zinc-950 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] disabled:opacity-50 transition-all hover:scale-[1.02] disabled:hover:scale-100"
               >
                 {loading ? (
-                  <span className="flex items-center gap-1">
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
                     Registering...
-                  </span>
+                  </>
                 ) : (
                   'Create Account'
                 )}

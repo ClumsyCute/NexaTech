@@ -60,23 +60,24 @@ export default function NotificationsClient({ initialNotifications }: Notificati
   const getIcon = (type: string) => {
     switch (type) {
       case 'NEW_JOB':
-        return <Briefcase className="h-5 w-5 text-indigo-650" />;
+        return <Briefcase className="h-5 w-5 text-emerald-400" />;
       case 'STATUS_CHANGE':
-        return <CheckCircle2 className="h-5 w-5 text-indigo-600" />;
+        return <CheckCircle2 className="h-5 w-5 text-emerald-400" />;
       default:
-        return <Bell className="h-5 w-5 text-slate-500" />;
+        return <Bell className="h-5 w-5 text-zinc-400" />;
     }
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8 pt-24 min-h-screen">
       {/* Title Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12 relative z-10">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-emerald-500/20 blur-xl rounded-full opacity-50" />
+          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl relative">
             Notifications Center
           </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-2 text-sm text-zinc-400 relative">
             Keep track of application updates, interviews, and career notifications.
           </p>
         </div>
@@ -84,18 +85,18 @@ export default function NotificationsClient({ initialNotifications }: Notificati
         {unreadCount > 0 && (
           <button
             onClick={handleMarkAllAsRead}
-            className="flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors"
+            className="flex items-center gap-2 rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-[11px] uppercase tracking-wider font-bold text-white hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-400 transition-all group"
           >
-            <MailOpen className="h-4 w-4" />
+            <MailOpen className="h-4 w-4 group-hover:scale-110 transition-transform" />
             Mark all as read
           </button>
         )}
       </div>
 
       {/* Notifications list */}
-      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
+      <div className="glass-card rounded-3xl overflow-hidden relative z-10">
         {notifications.length > 0 ? (
-          <div className="divide-y divide-slate-100 dark:divide-slate-800">
+          <div className="divide-y divide-white/5">
             <AnimatePresence initial={false}>
               {notifications.map((notif) => (
                 <motion.div
@@ -104,43 +105,45 @@ export default function NotificationsClient({ initialNotifications }: Notificati
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className={`p-6 transition-all relative flex gap-4 ${
+                  className={`p-8 transition-colors flex gap-6 group hover:bg-white/5 ${
                     !notif.isRead
-                      ? 'bg-indigo-50/20 border-l-4 border-indigo-600 dark:bg-indigo-950/10'
-                      : 'border-l-4 border-transparent'
+                      ? 'bg-emerald-500/5 relative overflow-hidden'
+                      : ''
                   }`}
                 >
+                  {!notif.isRead && (
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
+                  )}
                   {/* Icon */}
-                  <div className="flex-shrink-0 mt-0.5">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 border border-slate-150/80 dark:bg-slate-800 dark:border-slate-700">
+                  <div className="flex-shrink-0 mt-1 relative z-10">
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-2xl border ${!notif.isRead ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-white/5 border-white/10'}`}>
                       {getIcon(notif.type)}
                     </div>
                   </div>
 
                   {/* Body Content */}
-                  <div className="flex-grow space-y-1">
+                  <div className="flex-grow space-y-1.5 relative z-10">
                     <div className="flex items-center justify-between gap-4">
-                      <h3 className={`text-base font-bold ${!notif.isRead ? 'text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
+                      <h3 className={`text-base font-bold ${!notif.isRead ? 'text-white' : 'text-zinc-300'}`}>
                         {notif.title}
                       </h3>
-                      <span className="text-xs text-slate-400 font-medium">
+                      <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 whitespace-nowrap">
                         {new Date(notif.createdAt).toLocaleDateString(undefined, {
                           dateStyle: 'medium',
-                          timeStyle: 'short',
                         })}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                    <p className={`text-sm leading-relaxed ${!notif.isRead ? 'text-zinc-400' : 'text-zinc-500'}`}>
                       {notif.message}
                     </p>
                   </div>
 
                   {/* Actions */}
                   {!notif.isRead && (
-                    <div className="flex-shrink-0 self-center">
+                    <div className="flex-shrink-0 self-center relative z-10">
                       <button
                         onClick={() => handleMarkAsRead(notif.id)}
-                        className="rounded-full p-1.5 text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-400 transition-colors"
+                        className="flex items-center justify-center h-10 w-10 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-zinc-950 shadow-[0_0_15px_rgba(16,185,129,0.1)] hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all hover:scale-110"
                         title="Mark as read"
                       >
                         <Check className="h-5 w-5" />
@@ -152,10 +155,12 @@ export default function NotificationsClient({ initialNotifications }: Notificati
             </AnimatePresence>
           </div>
         ) : (
-          <div className="text-center py-20 px-4">
-            <Bell className="mx-auto h-12 w-12 text-slate-400 animate-pulse" />
-            <h3 className="mt-2 text-sm font-semibold text-slate-900 dark:text-white">All caught up!</h3>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <div className="text-center py-24 px-4">
+            <div className="mx-auto h-20 w-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6">
+              <Bell className="h-10 w-10 text-emerald-500/50" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">All caught up!</h3>
+            <p className="text-zinc-400 max-w-sm mx-auto">
               You have no notifications in your inbox.
             </p>
           </div>

@@ -89,46 +89,46 @@ export default function JobsListClient({ initialJobs }: JobsListClientProps) {
   }, [initialJobs, search, selectedLocations, selectedExperience, selectedTypes]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 pt-24 min-h-[90vh]">
       {/* Header */}
-      <div className="text-center md:text-left mb-10">
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+      <div className="text-center md:text-left mb-12">
+        <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
           Current Career Opportunities
         </h1>
-        <p className="mt-2 text-base text-slate-500 dark:text-slate-400">
+        <p className="mt-4 text-lg text-zinc-400 max-w-2xl">
           Find your next challenge. Apply to join our team of innovators.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-4 relative z-10">
         {/* Left Column: Sidebar Filters */}
         <div className="space-y-6 lg:col-span-1">
           {/* Search Box */}
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-white mb-3">Search Jobs</h2>
-            <div className="relative">
+          <div className="rounded-2xl glass-card p-5">
+            <h2 className="text-sm font-semibold text-white mb-4 tracking-wide uppercase">Search Jobs</h2>
+            <div className="relative group">
               <input
                 type="text"
                 placeholder="Title, skills, keyword..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-lg border border-slate-200 py-2 pl-9 pr-4 text-sm text-slate-950 bg-slate-50 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-xl border border-white/10 py-2.5 pl-10 pr-4 text-sm text-white bg-black/20 focus:border-emerald-500/50 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-zinc-600"
               />
-              <Search className="absolute left-3 top-2.5 h-4.5 w-4.5 text-slate-400" />
+              <Search className="absolute left-3 top-3 h-4.5 w-4.5 text-zinc-500 group-focus-within:text-emerald-400 transition-colors" />
             </div>
           </div>
 
           {/* Filters Card */}
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4 dark:border-slate-800">
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-white">Filter Results</h2>
+          <div className="rounded-2xl glass-card p-5">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-5">
+              <h2 className="text-sm font-semibold text-white tracking-wide uppercase">Filters</h2>
               {(selectedLocations.length > 0 ||
                 selectedExperience.length > 0 ||
                 selectedTypes.length > 0 ||
                 search.length > 0) && (
                 <button
                   onClick={clearFilters}
-                  className="text-xs font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+                  className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors bg-emerald-400/10 hover:bg-emerald-400/20 px-2 py-1 rounded-md"
                 >
                   Clear All
                 </button>
@@ -137,16 +137,23 @@ export default function JobsListClient({ initialJobs }: JobsListClientProps) {
 
             {/* Employment Type Filter */}
             <div className="mb-6">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Job Type</h3>
-              <div className="space-y-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-3 flex items-center gap-2">
+                <Briefcase className="h-3 w-3" /> Job Type
+              </h3>
+              <div className="space-y-2.5">
                 {employmentTypes.map((type) => (
-                  <label key={type} className="flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-300 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedTypes.includes(type)}
-                      onChange={() => toggleType(type)}
-                      className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-850 dark:bg-slate-950"
-                    />
+                  <label key={type} className="flex items-center gap-3 text-sm text-zinc-400 hover:text-white cursor-pointer transition-colors group">
+                    <div className="relative flex items-center justify-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedTypes.includes(type)}
+                        onChange={() => toggleType(type)}
+                        className="peer h-4 w-4 appearance-none rounded border border-white/20 bg-black/20 checked:border-emerald-500 checked:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 transition-all"
+                      />
+                      <svg className="absolute w-2.5 h-2.5 text-zinc-950 opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 5L4.5 8.5L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
                     <span>{type}</span>
                   </label>
                 ))}
@@ -155,16 +162,23 @@ export default function JobsListClient({ initialJobs }: JobsListClientProps) {
 
             {/* Location Filter */}
             <div className="mb-6">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Location</h3>
-              <div className="space-y-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-3 flex items-center gap-2">
+                <MapPin className="h-3 w-3" /> Location
+              </h3>
+              <div className="space-y-2.5">
                 {locations.map((loc) => (
-                  <label key={loc} className="flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-300 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedLocations.includes(loc)}
-                      onChange={() => toggleLocation(loc)}
-                      className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-850 dark:bg-slate-950"
-                    />
+                  <label key={loc} className="flex items-center gap-3 text-sm text-zinc-400 hover:text-white cursor-pointer transition-colors group">
+                    <div className="relative flex items-center justify-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedLocations.includes(loc)}
+                        onChange={() => toggleLocation(loc)}
+                        className="peer h-4 w-4 appearance-none rounded border border-white/20 bg-black/20 checked:border-emerald-500 checked:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 transition-all"
+                      />
+                      <svg className="absolute w-2.5 h-2.5 text-zinc-950 opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 5L4.5 8.5L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
                     <span>{loc}</span>
                   </label>
                 ))}
@@ -173,16 +187,23 @@ export default function JobsListClient({ initialJobs }: JobsListClientProps) {
 
             {/* Experience Filter */}
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Experience Level</h3>
-              <div className="space-y-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-3 flex items-center gap-2">
+                <GraduationCap className="h-3 w-3" /> Experience Level
+              </h3>
+              <div className="space-y-2.5">
                 {experiences.map((exp) => (
-                  <label key={exp} className="flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-300 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedExperience.includes(exp)}
-                      onChange={() => toggleExperience(exp)}
-                      className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-850 dark:bg-slate-950"
-                    />
+                  <label key={exp} className="flex items-center gap-3 text-sm text-zinc-400 hover:text-white cursor-pointer transition-colors group">
+                    <div className="relative flex items-center justify-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedExperience.includes(exp)}
+                        onChange={() => toggleExperience(exp)}
+                        className="peer h-4 w-4 appearance-none rounded border border-white/20 bg-black/20 checked:border-emerald-500 checked:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 transition-all"
+                      />
+                      <svg className="absolute w-2.5 h-2.5 text-zinc-950 opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 5L4.5 8.5L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
                     <span>{exp}</span>
                   </label>
                 ))}
@@ -193,9 +214,9 @@ export default function JobsListClient({ initialJobs }: JobsListClientProps) {
 
         {/* Right Column: Jobs list */}
         <div className="lg:col-span-3">
-          <div className="flex items-center justify-between mb-4 px-1">
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Showing <span className="font-semibold text-slate-900 dark:text-white">{filteredJobs.length}</span> job openings
+          <div className="flex items-center justify-between mb-6 px-1">
+            <p className="text-sm text-zinc-400">
+              Showing <span className="font-semibold text-white">{filteredJobs.length}</span> open positions
             </p>
           </div>
 
@@ -209,45 +230,46 @@ export default function JobsListClient({ initialJobs }: JobsListClientProps) {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.2, delay: idx * 0.03 }}
-                    className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-6"
+                    transition={{ duration: 0.3, delay: idx * 0.05 }}
+                    className="group glass-card rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6"
                   >
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10 dark:bg-indigo-950/40 dark:text-indigo-400 dark:ring-indigo-500/20">
+                        <span className="inline-flex items-center rounded-lg bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/20">
                           {job.employmentType}
                         </span>
-                        <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        <span className="inline-flex items-center rounded-lg bg-white/5 px-2.5 py-1 text-xs font-medium text-zinc-300 border border-white/10">
                           {job.experience}
                         </span>
                       </div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      
+                      <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">
                         {job.title}
                       </h3>
                       
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-slate-500 dark:text-slate-400">
-                        <span className="flex items-center gap-1">
-                          <MapPin className="h-4 w-4 text-slate-400" />
+                      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-zinc-400">
+                        <span className="flex items-center gap-1.5">
+                          <MapPin className="h-4 w-4 text-zinc-500" />
                           {job.location}
                         </span>
                         {job.salary && (
-                          <span className="flex items-center gap-0.5">
-                            <DollarSign className="h-4 w-4 text-slate-400" />
+                          <span className="flex items-center gap-1.5">
+                            <DollarSign className="h-4 w-4 text-zinc-500" />
                             {job.salary}
                           </span>
                         )}
-                        <span className="flex items-center gap-1">
-                          <GraduationCap className="h-4 w-4 text-slate-400" />
+                        <span className="flex items-center gap-1.5">
+                          <GraduationCap className="h-4 w-4 text-zinc-500" />
                           Deadline: {new Date(job.deadline).toLocaleDateString(undefined, { dateStyle: 'medium' })}
                         </span>
                       </div>
 
                       {/* Displaying brief skills tags */}
-                      <div className="flex flex-wrap gap-1.5 mt-3 pt-2 border-t border-slate-100 dark:border-slate-800/60">
+                      <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-white/5">
                         {job.skills.split(',').map((skill) => (
                           <span
                             key={skill}
-                            className="inline-flex items-center rounded-full bg-slate-50 px-2 py-0.5 text-xs text-slate-600 border border-slate-200/60 dark:bg-slate-950 dark:text-slate-400 dark:border-slate-800"
+                            className="inline-flex items-center rounded-md bg-white/5 px-2 py-1 text-xs text-zinc-400 border border-white/5"
                           >
                             {skill.trim()}
                           </span>
@@ -255,33 +277,37 @@ export default function JobsListClient({ initialJobs }: JobsListClientProps) {
                       </div>
                     </div>
 
-                    <div className="flex items-center">
+                    <div className="flex items-center md:pl-4">
                       <Link
                         href={`/jobs/${job.id}`}
-                        className="w-full md:w-auto text-center rounded-lg bg-indigo-50 px-4 py-2.5 text-sm font-semibold text-indigo-700 hover:bg-indigo-100 transition-all flex items-center justify-center gap-1 group/btn dark:bg-indigo-950/40 dark:text-indigo-400 dark:hover:bg-indigo-900/40"
+                        className="w-full md:w-auto text-center rounded-xl bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-500 hover:text-zinc-950 transition-all duration-300 flex items-center justify-center gap-2 group/btn border border-white/10 hover:border-emerald-500"
                       >
                         View Details
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" />
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                       </Link>
                     </div>
                   </motion.div>
                 ))
               ) : (
-                <div className="text-center py-16 rounded-2xl border border-dashed border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900">
-                  <Briefcase className="mx-auto h-12 w-12 text-slate-400" />
-                  <h3 className="mt-2 text-sm font-semibold text-slate-900 dark:text-white">No jobs found</h3>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                    Try adjusting your search query or clear all filters.
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-20 rounded-2xl border border-dashed border-white/10 glass bg-black/20"
+                >
+                  <Briefcase className="mx-auto h-12 w-12 text-zinc-600 mb-4" />
+                  <h3 className="text-lg font-semibold text-white">No jobs found</h3>
+                  <p className="mt-2 text-sm text-zinc-400 max-w-sm mx-auto">
+                    Try adjusting your search query or clear all filters to see more open positions.
                   </p>
                   <div className="mt-6">
                     <button
                       onClick={clearFilters}
-                      className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+                      className="rounded-xl bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/20 transition-colors"
                     >
                       Clear Filters
                     </button>
                   </div>
-                </div>
+                </motion.div>
               )}
             </AnimatePresence>
           </div>
